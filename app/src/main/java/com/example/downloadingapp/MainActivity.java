@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: starting Asynctask");
         DownloadData downloadData = new DownloadData();
-        downloadData.execute("URL goes here");
+        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
         Log.d(TAG, "onCreate: done");
     }
 
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 URL url = new URL(urlPath);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 int response = connection.getResponseCode();
-                Log.d(TAG, "downloadXML: The respons code was " + response);
+                Log.d(TAG, "downloadXML: The response code was " + response);
 //                InputStream inputStream = connection.getInputStream();
 //                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 //                BufferedReader reader = new BufferedReader(inputStreamReader);
@@ -71,11 +70,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 reader.close();
+                return xmlResult.toString();
             } catch (MalformedURLException e){
-                Log.e(TAG, "downloadXML: Invalid URL" + e.getMessage());
+                Log.e(TAG, "downloadXML: Invalid URL " + e.getMessage());
             } catch (IOException f){
-                Log.e(TAG, "downloadXML: IOException occured" +  f.getMessage() );
+                Log.e(TAG, "downloadXML: IOException occured " +  f.getMessage() );
+            } catch (SecurityException e) {
+                Log.e(TAG, "downloadXML: Security Exception. Needs permission? " + e.getMessage());
             }
+
+            return null;
         }
     }
 }
