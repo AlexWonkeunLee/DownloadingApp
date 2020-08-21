@@ -36,13 +36,15 @@ public class MainActivity extends AppCompatActivity {
             if(rssFeed == null) {
                 Log.e(TAG, "doInBackground: Error downloading");
             }
-            return "doInBackground completed.";
+            return rssFeed;
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d(TAG, "onPostExecute: parameter is " + s);
+            ParseApplications parseApplications = new ParseApplications();
+            parseApplications.parse(s);
         }
 
         private String downloadXML(String urlPath) {
